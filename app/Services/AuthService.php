@@ -11,33 +11,39 @@ class AuthService
         $this->authRepositories = $authRepositories;
     }
 
-    public function login(array $data): array
+    public function login(array $data)
     {
-        $email = trim($data['email'] ?? '');
-        $password = trim($data['password'] ?? '');
+        $email = $data['email'] ?? null;
+        $password = $data['password'] ?? null;
 
-        if ($email === '' || $password === '') {
+
+        if (!$email || !$password) {
             return ['error' => 'Email and password are required.'];
         }
 
-        $user = $this->authRepositories->getByEmail($email);
+        $user = $this->authRepositories->getbyemail($email);
 
         if (!$user) {
-            return ['error' => 'User not found.'];
+            return ['error' => 'User not Found'];
+        }
+        if ($password !== base64_decode($user['password'])) {
+            return ['error' => 'Invalid password'];
         }
 
-        if (!password_verify($password, $user['password'])) {
-            return ['error' => 'Invalid password.'];
-        }
 
-        // Success: return user data
         return [
             'success' => true,
-            'user' => [
-                'email' => $user['email'],
-                'name' => $user['name'],
-                'id' => $user['id']
-            ]
+            'email'   => $user['email'],
+            'name'    => $user['name'],
+            'id'      => $user['id']
         ];
+        // echo "kyaw";
+        // die();
+    }
+
+    public function register()
+    {
+        $id = $_POST['id'];
+        $user = $this->authRepositories->getbyemail($id);
     }
 }
