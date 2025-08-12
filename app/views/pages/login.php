@@ -20,11 +20,12 @@
 <body class="min-h-screen flex items-center justify-center">
     <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
         <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Login</h2>
-        <?php if (!empty($error)): ?>
-            <div class="alert alert-danger">
-                <?= htmlspecialchars($error) ?>
+        <?php if (!empty($data['error'])): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <?= htmlspecialchars($data['error']) ?>
             </div>
         <?php endif; ?>
+
         <form action="<?php echo URLROOT; ?>/auth/login" method="POST" class="space-y-4">
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>

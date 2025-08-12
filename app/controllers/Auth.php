@@ -27,26 +27,23 @@ class Auth extends Controller{
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $this->service->login($_POST);
 
+            // If there's an error, pass it to the view
             if (isset($result['error'])) {
-                // Show error in login page
-                $this->view('pages/login', ['error' => $result['error']]);
+                $data = ['error' => $result['error']];
+                $this->view('pages/login', $data);
                 return;
             }
 
-            // Login success → Store session & redirect
-            $_SESSION['user_id'] = $result['user']['id'];
-            $_SESSION['user_name'] = $result['user']['name'];
-            $_SESSION['user_email'] = $result['user']['email'];
-
-            header('Location: /dashboard');
-            exit;
+            // If successful, redirect or do something else
+            $_SESSION['user_id'] = $result['id'];
+            $_SESSION['user_name'] = $result['name'];
+            redirect('dashboard');
+            return;
         }
 
-        // GET request → just show login form
+        // Initial page load (no POST)
         $this->view('pages/login');
     }
-    
-
 }
 
 
