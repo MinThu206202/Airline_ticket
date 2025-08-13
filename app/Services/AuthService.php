@@ -41,9 +41,54 @@ class AuthService
         // die();
     }
 
-    public function register()
+    public function register(array $data)
     {
-        $id = $_POST['id'];
-        $user = $this->authRepositories->getbyemail($id);
+
+        $email = $data['email'] ?? null;
+        $name = $data['name'] ?? null;
+        $password = $data['password'] ?? null;
+
+        if (!$email || !$name || !$password) {
+            return ['error' => 'Required Failed'];
+        }
+
+        $password = base64_encode($password);
+
+        $update_data = [
+            'email' => $email,
+            'name' => $name,
+            'password' => $password
+        ];
+
+        $user = $this->authRepositories->getbyemail($email);
+
+        if ($user) {
+            return ['error' => 'Email is Already Register'];
+        }
+
+        $createuser = $this->authRepositories->create($update_data);
+        return [
+            'success' => true,
+            'email'   => $email,
+        ];
+    }
+
+    public function forget_password($data)
+    {
+        $email = $data['email'];
+        if (!$email) {
+            return ['error' => "Email is required"];
+        }
+
+        $user = $this->authRepositories->getbyemail($email);
+
+        if (!$user) {
+            return ['error' => "Mail is not already Register"];
+        }
+
+        return  [
+            'success' => true,
+            'email' => $email,
+        ];
     }
 }

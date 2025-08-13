@@ -25,6 +25,11 @@ class AuthRepositories implements AuthInterface
        return $this->db->columnFilter('users','email',$email);
     }
 
+    public function create(array $data)
+    {
+        return $this->db->create('users',$data);
+    }
+
 }
 
 ?>
