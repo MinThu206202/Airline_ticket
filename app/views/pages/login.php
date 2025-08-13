@@ -29,18 +29,26 @@
         <form action="<?php echo URLROOT; ?>/auth/login" method="POST" class="space-y-4">
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                <input type="email" name="email" id="email" class="w-full rounded-md border-gray-300 shadow-sm p-2 mt-1 focus:ring-blue-500 focus:border-blue-500">
+                <input type="email" name="email" id="email"
+                    class="w-full rounded-md border-gray-300 shadow-sm p-2 mt-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" name="password" id="password" class="w-full rounded-md border-gray-300 shadow-sm p-2 mt-1 focus:ring-blue-500 focus:border-blue-500">
+                <div class="flex justify-between items-center">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <a href="<?php echo URLROOT; ?>/pages/forgetpassword"
+                        class="text-sm text-blue-600 hover:text-blue-700 transition-colors">Forgot Password?</a>
+                </div>
+                <input type="password" name="password" id="password"
+                    class="w-full rounded-md border-gray-300 shadow-sm p-2 mt-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
-            <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md font-semibold mt-4">
+            <button type="submit"
+                class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md font-semibold mt-4">
                 Sign In
             </button>
         </form>
         <div class="mt-6 text-center text-gray-600">
-            Don't have an account? <a href="register.html" class="text-blue-600 hover:text-blue-700 font-medium transition-colors">Register here</a>
+            Don't have an account? <a href="register.html"
+                class="text-blue-600 hover:text-blue-700 font-medium transition-colors">Register here</a>
         </div>
     </div>
 </body>

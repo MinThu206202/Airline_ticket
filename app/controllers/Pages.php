@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 class Pages extends Controller
 {
@@ -24,5 +26,18 @@ class Pages extends Controller
     {
         $this->view('pages/register');
     }
-    
+    public function forgetpassword()
+    {
+        $this->view('pages/forget_password');
+    }
+
+    public function otp()
+    {
+        $this->view('pages/otp');
+    }
+
+    public function changepassword()
+    {
+        $this->view('pages/changepassword');
+    }
 }
