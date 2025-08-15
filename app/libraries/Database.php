@@ -75,7 +75,7 @@ class Database
     //         // $query = "INSERT INTO isec_test(sms_id,status,msgid) values ('1','OK','123-123')";
     //         // $query = mysql_query($sql);
     //         //echo $sql;
-           
+
     //         // echo $status;
     //     } catch (PODException $e) {
     //         echo $e;
@@ -84,7 +84,7 @@ class Database
 
     // Update Query
     public function update($table, $id, $data)
-    {   
+    {
         // First, we don't want id from category table
         if (isset($data['id'])) {
             unset($data['id']);
@@ -92,7 +92,8 @@ class Database
 
         try {
             $columns = array_keys($data);
-            function map ($item) {
+            function map($item)
+            {
                 return $item . '=:' . $item;
             }
             $columns = array_map('map', $columns);
@@ -162,18 +163,16 @@ class Database
 
     public function unsetLogin($id)
     {
-       try{ 
-           $sql        = "UPDATE users SET is_login = :false WHERE id = :id";
-           $stm        = $this->pdo->prepare($sql);
-           $stm->bindValue(':false','0');
-           $stm->bindValue(':id',$id);
-           $success = $stm->execute();
-           $row     = $stm->fetch(PDO::FETCH_ASSOC);
-           return ($success) ? $row : [];
-        }
-        catch( Exception $e)
-        {
-            echo($e);
+        try {
+            $sql        = "UPDATE users SET is_login = :false WHERE id = :id";
+            $stm        = $this->pdo->prepare($sql);
+            $stm->bindValue(':false', '0');
+            $stm->bindValue(':id', $id);
+            $success = $stm->execute();
+            $row     = $stm->fetch(PDO::FETCH_ASSOC);
+            return ($success) ? $row : [];
+        } catch (Exception $e) {
+            echo ($e);
         }
     }
 
@@ -205,49 +204,40 @@ class Database
         $stm->bindValue(':column', $column);
         $success = $stm->execute();
         $row = $stm->fetch(PDO::FETCH_ASSOC);
-       //  print_r($row);
+        //  print_r($row);
         return ($success) ? $row : [];
     }
 
     // For Dashboard
     public function incomeTransition()
     {
-       try{
+        try {
 
-           $sql        = "SELECT *,SUM(amount) AS amount FROM incomes WHERE
+            $sql        = "SELECT *,SUM(amount) AS amount FROM incomes WHERE
            (date = { fn CURDATE() }) ";
-           $stm = $this->pdo->prepare($sql);
-           $success = $stm->execute();
+            $stm = $this->pdo->prepare($sql);
+            $success = $stm->execute();
 
-           $row     = $stm->fetch(PDO::FETCH_ASSOC);
-           return ($success) ? $row : [];
-
+            $row     = $stm->fetch(PDO::FETCH_ASSOC);
+            return ($success) ? $row : [];
+        } catch (Exception $e) {
+            echo ($e);
         }
-        catch( Exception $e)
-        {
-            echo($e);
-        }
-     
     }
 
     public function expenseTransition()
     {
-       try{
+        try {
 
-           $sql        = "SELECT * ,SUM(amount*qty) AS amount FROM expenses WHERE
+            $sql        = "SELECT * ,SUM(amount*qty) AS amount FROM expenses WHERE
            (date = { fn CURDATE() }) ";
-           $stm = $this->pdo->prepare($sql);
-           $success = $stm->execute();
+            $stm = $this->pdo->prepare($sql);
+            $success = $stm->execute();
 
-           $row     = $stm->fetch(PDO::FETCH_ASSOC);
-           return ($success) ? $row : [];
-
+            $row     = $stm->fetch(PDO::FETCH_ASSOC);
+            return ($success) ? $row : [];
+        } catch (Exception $e) {
+            echo ($e);
         }
-        catch( Exception $e)
-        {
-            echo($e);
-        }
-     
     }
 }
-

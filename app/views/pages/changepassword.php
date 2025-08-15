@@ -21,15 +21,20 @@
     <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
         <h2 class="text-3xl font-bold text-gray-800 text-center mb-2">Change Your Password</h2>
         <p class="text-center text-gray-500 mb-6">Enter and confirm your new password below.</p>
-        <form action="<?php echo URLROOT; ?>/page/changepassword" method="get" class="space-y-4">
+        <form action="<?php echo URLROOT; ?>/auth/changepassword" method="POST" class="space-y-4">
+            <?php if (!empty($data['error'])): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <?= htmlspecialchars($data['error']) ?>
+                </div>
+            <?php endif; ?>
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700">New Password</label>
-                <input type="password" id="password"
+                <input type="password" id="password" name="new"
                     class="w-full rounded-md border-gray-300 shadow-sm p-2 mt-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div>
                 <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                <input type="password" id="confirm-password"
+                <input type="password" id="confirm-password" name="confirm"
                     class="w-full rounded-md border-gray-300 shadow-sm p-2 mt-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
             <button type="submit"

@@ -38,24 +38,29 @@ $user = $_SESSION['email'];
         <h2 class="text-3xl font-bold text-gray-800 text-center mb-2">Verify Your Account</h2>
         <p class="text-center text-gray-500 mb-6">A verification code has been sent
             to <?= htmlspecialchars($user) ?> address.</p>
-        <form action="change-password.html" method="get" class="space-y-4">
+        <form action="<?php echo URLROOT; ?>/auth/otp" method="POST" class="space-y-4">
+            <?php if (!empty($data['error'])): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <?= htmlspecialchars($data['error']) ?>
+                </div>
+            <?php endif; ?>
             <div class="flex justify-center space-x-2">
-                <input type="text"
+                <input type="text" name="otp[]"
                     class="otp-input rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                     maxlength="1">
-                <input type="text"
+                <input type="text" name="otp[]"
                     class="otp-input rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                     maxlength="1">
-                <input type="text"
+                <input type="text" name="otp[]"
                     class="otp-input rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                     maxlength="1">
-                <input type="text"
+                <input type="text" name="otp[]"
                     class="otp-input rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                     maxlength="1">
-                <input type="text"
+                <input type="text" name="otp[]"
                     class="otp-input rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                     maxlength="1">
-                <input type="text"
+                <input type="text" name="otp[]"
                     class="otp-input rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                     maxlength="1">
             </div>

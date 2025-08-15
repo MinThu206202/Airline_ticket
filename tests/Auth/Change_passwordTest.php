@@ -8,56 +8,64 @@ require_once __DIR__ . "/../../app/Repositories/AuthRepositories.php";
 class Change_passwordTest extends TestCase
 {
     private $authRepoMock;
-    private $authRepositories;
+    private $authService;
 
     public function setUp(): void
     {
-        //create fake mock 
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->authRepoMock = $this->createMock(AuthRepositories::class);
-
-        //create repositore to use function in repo
-        $this->authRepositories = new AuthService($this->authRepoMock);
+        $this->authService = new AuthService($this->authRepoMock);
     }
 
-    //show error when email is required
-    public function testOtpFailWithEmailMissing()
+    // Missing required fields
+    public function testErrorCurrentConfirmPasswordMissing()
     {
-        $result = $this->authRepositories->forget_password(['email' => '']);
+        $data = ['new' => '', 'confirm' => ''];
+        $result = $this->authService->changepassword($data);
+
         $this->assertArrayHasKey('error', $result);
-        $this->assertEquals('Email is required', $result['error']);
+        $this->assertEquals('Password is required', $result['error']);
     }
 
-    //show error when user not found
-    public function testChangPasswordWithWrongMailFail()
+    // New and confirm don't match
+    public function testNotSameConfirmAndNewPasswordNotSame()
     {
+        $data = ['new' => 'abc123', 'confirm' => 'xyz789'];
+        $result = $this->authService->changepassword($data);
+        $this->assertArrayHasKey('error', $result);
+        $this->assertEquals("Password do not match", $result['error']);
+    }
 
-        $email = 'test@example.com';
+    // Success case
+    public function testNewAndConfirmPasswordSuccess()
+    {
+        $_SESSION['email'] = 'test@example.com';
+        $userId = '1';
+        $data = [
+            'new'     => 'newpass123',
+            'confirm' => 'newpass123'
+        ];
 
+        // Mock getbyemail
         $this->authRepoMock->expects($this->once())
             ->method('getbyemail')
-            ->with($email)
-            ->willReturn(null);
+            ->with($_SESSION['email'])
+            ->willReturn(['id' => $userId]);
 
-        $result = $this->authRepositories->forget_password(['email' => $email]);
-        $this->assertArrayHasKey('error', $result);
-        $this->assertEquals("Mail is not already Register", $result['error']);
-    }
-
-    //Show success when email is have in database
-    public function testWhenUserWithCorrectMailSuccess()
-    {
-        $email = 'test@example.com';
-
+        // Mock changepassword — expect id as first arg, and password array as second
         $this->authRepoMock->expects($this->once())
-            ->method('getbyemail')
-            ->with($email)
-            ->willReturn([
-                'email' => $email,
-            ]);
+            ->method('changepassword')
+            ->with(
+                $this->equalTo($userId),
+                $this->equalTo(['password' => base64_encode($data['new'])])
+            )
+            ->willReturn(true);
 
-        $result = $this->authRepositories->forget_password(['email' => $email]);
+        $result = $this->authService->changepassword($data);
+
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
-        $this->assertEquals('test@example.com', $result['email']);
     }
 }
