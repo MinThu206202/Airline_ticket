@@ -86,13 +86,70 @@ class Auth extends Controller
             // If successful, redirect or do something else
             session_start();
             $_SESSION['email'] = $result['email'];
-            // var_dump($_SESSION['email']);
-            // die();
             redirect('pages/otp');
             exit();
         }
 
         // Initial page load (no POST)
         $this->view('pages/forget_password');
+    }
+
+    public function otp()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // session_start();
+            // $email = $_SESSION['email'];
+            // var_dump($email);
+            // die();
+            $result = $this->service->otp($_POST);
+
+            // If there's an error, pass it to the view
+            if (isset($result['error'])) {
+                $data = ['error' => $result['error']];
+                $this->view('pages/otp', $data);
+                return;
+            }
+
+            // If successful, redirect or do something else
+            session_start();
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $_SESSION['email'] = $result['email'];
+            redirect('pages/changepassword');
+            exit();
+        }
+
+        // Initial page load (no POST)
+        $this->view('pages/otp');
+    }
+
+    public function changepassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $result = $this->service->changepassword($_POST);
+
+            // If there's an error, pass it to the view
+            if (isset($result['error'])) {
+                $data = ['error' => $result['error']];
+                $this->view('pages/changepassword', $data);
+                return;
+            }
+
+            // If successful, redirect or do something else
+            session_start();
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $_SESSION['email'] = $result['email'];
+            redirect('pages/login');
+            exit();
+        }
+
+        // Initial page load (no POST)
+        $this->view('pages/changepassword');
     }
 }
